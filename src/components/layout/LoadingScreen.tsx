@@ -19,6 +19,12 @@ export const LoadingScreen: React.FC = () => {
 			<p className="mt-4 font-bold font-mono tracking-widest text-sm md:text-base">
 				INITIALIZING SYSTEM...
 			</p>
+			<style>{`
+				@keyframes loading {
+					0% { width: 0%; }
+					100% { width: 100%; }
+				}
+			`}</style>
 		</div>
 	);
 };
