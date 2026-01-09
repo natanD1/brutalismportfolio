@@ -1,4 +1,4 @@
-import { X } from "lucide-react";
+import { Minimize2, Minus, Square, X } from "lucide-react";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
 import type { WindowState } from "../../types";
