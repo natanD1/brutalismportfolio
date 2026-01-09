@@ -159,14 +159,19 @@ export const WindowFrame: React.FC<WindowFrameProps> = ({
 			>
 				<div className="overflow-hidden min-h-0">
 					<div
-						className={`p-6 overflow-y-auto break-words ${
+						className={`p-6 pb-8 overflow-y-auto break-words ${
 							win.isMaximized || isMobile
 								? "max-h-[calc(100vh-140px)]"
 								: win.type === "work" || win.type === "repo-details"
 									? "max-h-96"
 									: "max-h-[600px]"
 						}`}
-						style={{ overflowWrap: "break-word", wordBreak: "break-word" }}
+						style={{
+							overflowWrap: "break-word",
+							wordBreak: "break-word",
+							touchAction: "pan-y",
+							overscrollBehavior: "contain",
+						}}
 					>
 						{children}
 					</div>

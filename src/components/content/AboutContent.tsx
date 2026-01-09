@@ -17,7 +17,7 @@ export const AboutContent: React.FC<AboutContentProps> = ({
 	const avatarUrl = useGitHubAvatar();
 
 	return (
-		<div className="flex flex-col gap-6">
+		<div className="flex flex-col gap-6 pb-4">
 			<div className="flex flex-col sm:flex-row gap-6 items-center">
 				<div className="flex-shrink-0">
 					<img
