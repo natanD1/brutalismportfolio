@@ -149,6 +149,46 @@ export const WindowFrame: React.FC<WindowFrameProps> = ({
 							className="text-black pointer-events-none"
 						/>
 					</button>
+					{!isMobile && (
+						<>
+							<button
+								onClick={(e) => {
+									e.stopPropagation();
+									onMinimize(win.id);
+								}}
+								className="w-6 h-6 flex items-center justify-center rounded-full border-2 border-black bg-yellow-300 hover:opacity-80 active:scale-90"
+								title="Minimize"
+							>
+								<Minus
+									size={12}
+									strokeWidth={3}
+									className="text-black pointer-events-none"
+								/>
+							</button>
+							<button
+								onClick={(e) => {
+									e.stopPropagation();
+									onMaximize(win.id);
+								}}
+								className="w-6 h-6 flex items-center justify-center rounded-full border-2 border-black bg-green-400 hover:opacity-80 active:scale-90"
+								title={win.isMaximized ? "Restore" : "Maximize"}
+							>
+								{win.isMaximized ? (
+									<Minimize2
+										size={10}
+										strokeWidth={3}
+										className="text-black pointer-events-none"
+									/>
+								) : (
+									<Square
+										size={10}
+										strokeWidth={3}
+										className="text-black pointer-events-none"
+									/>
+								)}
+							</button>
+						</>
+					)}
 				</div>
 			</div>
 
