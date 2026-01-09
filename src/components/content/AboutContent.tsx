@@ -1,4 +1,4 @@
-import { Github } from "lucide-react";
+import { Download, Github } from "lucide-react";
 import type React from "react";
 import { useGitHubAvatar } from "../../hooks";
 import type { Language, Translations } from "../../types";
@@ -38,7 +38,24 @@ export const AboutContent: React.FC<AboutContentProps> = ({
 			</div>
 			<p className="text-gray-700">{t.bio}</p>
 
-			<div className="flex gap-3 mt-4">
+			<div className="flex flex-col sm:flex-row gap-3 mt-4">
+				<a
+					href={
+						lang === "pt"
+							? "/Curriculum Natan Dourado - PT-BR.pdf"
+							: "/Curriculum Natan Dourado - ENG.pdf"
+					}
+					download
+					className="flex-1"
+				>
+					<NeoButton className="w-full bg-purple-600 text-white hover:bg-purple-700 border-black flex items-center justify-center gap-2">
+						<Download size={20} strokeWidth={2.5} />
+						{lang === "pt" ? "Baixar Currículo" : "Download Resume"}
+					</NeoButton>
+				</a>
+			</div>
+
+			<div className="flex flex-col sm:flex-row gap-3 mt-2">
 				<a
 					href="https://linkedin.com/in/natandourado"
 					target="_blank"

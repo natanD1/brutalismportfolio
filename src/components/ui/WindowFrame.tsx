@@ -1,4 +1,4 @@
-import { Minimize2, Minus, Square, X } from "lucide-react";
+import { X } from "lucide-react";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
 import type { WindowState } from "../../types";
@@ -68,23 +68,27 @@ export const WindowFrame: React.FC<WindowFrameProps> = ({
 	// Only apply maximized styles if NOT minimized
 	const isEffectiveMaximized = win.isMaximized && !win.isMinimized;
 
-	const style: React.CSSProperties = isEffectiveMaximized
-		? {
-				position: "fixed",
-				top: "16px",
-				left: "16px",
-				right: "16px",
-				bottom: "16px",
-				width: "auto",
-				height: "auto",
-				zIndex: win.zIndex + 100, // Garante que a maximizada fique acima das outras
-			}
-		: {
-				position: "absolute",
-				top: win.y,
-				left: win.x,
-				zIndex: win.zIndex,
-			};
+	// Check if mobile
+	const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+
+	const style: React.CSSProperties =
+		isEffectiveMaximized || isMobile
+			? {
+					position: "fixed",
+					top: isMobile ? "80px" : "16px",
+					left: "16px",
+					right: "16px",
+					bottom: "16px",
+					width: "auto",
+					height: "auto",
+					zIndex: win.zIndex + 100,
+				}
+			: {
+					position: "absolute",
+					top: win.y,
+					left: win.x,
+					zIndex: win.zIndex,
+				};
 
 	const maximizedClass = win.isMaximized
 		? "rounded-lg shadow-[8px_8px_0px_#000]"
@@ -93,7 +97,7 @@ export const WindowFrame: React.FC<WindowFrameProps> = ({
 	// If minimized, force small width. If maximized (and not min), auto width. Else, default width.
 	const dimensionsClass = win.isMinimized
 		? "w-[300px]"
-		: win.isMaximized
+		: win.isMaximized || isMobile
 			? ""
 			: "w-full max-w-lg";
 
@@ -120,7 +124,7 @@ export const WindowFrame: React.FC<WindowFrameProps> = ({
 
 	return (
 		<div
-			className={`border-4 border-black bg-white flex flex-col ${transitionClass} ${maximizedClass} ${dimensionsClass} ${draggingClass}`}
+			className={`border-4 border-black bg-white flex flex-col overflow-hidden ${transitionClass} ${maximizedClass} ${dimensionsClass} ${draggingClass}`}
 			style={style}
 			onMouseDown={() => onFocus(win.id)}
 		>
@@ -129,8 +133,8 @@ export const WindowFrame: React.FC<WindowFrameProps> = ({
 				className={`flex justify-between items-center p-3 border-b-4 border-black text-white font-bold cursor-move select-none ${headerBg}`}
 				onMouseDown={handleMouseDown}
 			>
-				<span>{titleOverride || win.title}</span>
-				<div className="flex gap-2 items-center">
+				<span className="truncate mr-2">{titleOverride || win.title}</span>
+				<div className="flex gap-2 items-center flex-shrink-0">
 					<button
 						onClick={(e) => {
 							e.stopPropagation();
@@ -145,42 +149,6 @@ export const WindowFrame: React.FC<WindowFrameProps> = ({
 							className="text-black pointer-events-none"
 						/>
 					</button>
-					<button
-						onClick={(e) => {
-							e.stopPropagation();
-							onMinimize(win.id);
-						}}
-						className="w-6 h-6 flex items-center justify-center rounded-full border-2 border-black bg-yellow-300 hover:opacity-80 active:scale-90"
-						title="Minimize"
-					>
-						<Minus
-							size={12}
-							strokeWidth={3}
-							className="text-black pointer-events-none"
-						/>
-					</button>
-					<button
-						onClick={(e) => {
-							e.stopPropagation();
-							onMaximize(win.id);
-						}}
-						className="w-6 h-6 flex items-center justify-center rounded-full border-2 border-black bg-green-400 hover:opacity-80 active:scale-90"
-						title={win.isMaximized ? "Restore" : "Maximize"}
-					>
-						{win.isMaximized ? (
-							<Minimize2
-								size={10}
-								strokeWidth={3}
-								className="text-black pointer-events-none"
-							/>
-						) : (
-							<Square
-								size={10}
-								strokeWidth={3}
-								className="text-black pointer-events-none"
-							/>
-						)}
-					</button>
 				</div>
 			</div>
 
@@ -191,13 +159,14 @@ export const WindowFrame: React.FC<WindowFrameProps> = ({
 			>
 				<div className="overflow-hidden min-h-0">
 					<div
-						className={`p-6 overflow-auto ${
-							win.isMaximized
-								? "h-[calc(100vh-100px)]"
+						className={`p-6 overflow-y-auto break-words ${
+							win.isMaximized || isMobile
+								? "max-h-[calc(100vh-140px)]"
 								: win.type === "work" || win.type === "repo-details"
-									? "h-96"
-									: "h-auto"
+									? "max-h-96"
+									: "max-h-[600px]"
 						}`}
+						style={{ overflowWrap: "break-word", wordBreak: "break-word" }}
 					>
 						{children}
 					</div>
